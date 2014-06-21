@@ -64,7 +64,8 @@ public class ScanListAdapter extends BaseAdapter {
             holder = (ViewHolder) convertView.getTag();
         }
         ScanItem item = getItem(position);
-        holder.pxCount.setText("PX: " + item.getPxCount());
+        int percent = (int) ((item.getPxCount() * 100.0f) / mOptimalCount);
+        holder.pxCount.setText("PX: " + item.getPxCount() + " (" + percent + "%)");
         holder.dimen.setText(item.getWidth() + "W " + item.getHeight() + "H");
         holder.name.setText(item.getName());
         holder.pkg.setText(item.getPackageName());
