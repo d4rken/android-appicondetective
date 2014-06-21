@@ -11,7 +11,6 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.util.DisplayMetrics;
 import android.view.*;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -23,6 +22,7 @@ public class ScanFragment extends Fragment implements LoaderManager.LoaderCallba
     private ListView mListView;
     private ScanListAdapter mAdapter;
     private TextView mInfo;
+    private ProgressBar mProgressBar;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -35,11 +35,14 @@ public class ScanFragment extends Fragment implements LoaderManager.LoaderCallba
         View layout = inflater.inflate(R.layout.fragment_main, container, false);
         mInfo = (TextView) layout.findViewById(R.id.tv_info);
         mListView = (ListView) layout.findViewById(R.id.lv_result);
-        ProgressBar progressBar = new ProgressBar(getActivity());
-        progressBar.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT, Gravity.CENTER));
-        progressBar.setIndeterminate(true);
-        mListView.setEmptyView(progressBar);
+        mProgressBar = (ProgressBar) layout.findViewById(android.R.id.empty);
         return layout;
+    }
+
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        mListView.setEmptyView(mProgressBar);
+        super.onViewCreated(view, savedInstanceState);
     }
 
     @Override
