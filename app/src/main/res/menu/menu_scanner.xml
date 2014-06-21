@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aid="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/menu_scanner_refresh"
+        android:title="Refresh"
+        android:icon="@drawable/ic_action_reload"
+        aid:showAsAction="always" />
+    <item
+        android:id="@+id/menu_by_darken"
+        android:title="darken @ Twitter"
+        android:icon="@drawable/ic_action_twitter"
+        aid:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/menu_github"
+        android:title="Source code"
+        android:icon="@drawable/ic_action_github"
+        aid:showAsAction="ifRoom" />
+</menu>

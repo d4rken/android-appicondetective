@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="worse">#ED2626</color>
+    <color name="bad">#EDE611</color>
+    <color name="ok">#18CC3C</color>
+    <color name="meh">#919E94</color>
+</resources>

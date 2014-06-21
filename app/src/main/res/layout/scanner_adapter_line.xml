@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/ok">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Pixel: 200400"
+        android:ems="6"
+        android:id="@+id/tv_pixelcount"
+        android:gravity="end"
+        android:textColor="@android:color/black"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="000H 000W"
+        android:gravity="end"
+        android:ems="6"
+        android:textColor="@android:color/black"
+        android:id="@+id/tv_dimen"
+        android:layout_below="@+id/tv_pixelcount"
+        android:layout_toRightOf="@+id/tv_name"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="SD Maid"
+        android:singleLine="true"
+        android:id="@+id/tv_name"
+        android:textColor="@android:color/black"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_toLeftOf="@+id/tv_pixelcount" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="eu.thedarken.sdm"
+        android:singleLine="true"
+        android:id="@+id/tv_packagename"
+        android:textColor="@android:color/black"
+        android:layout_alignBaseline="@+id/tv_dimen"
+        android:layout_alignBottom="@+id/tv_dimen"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_toLeftOf="@+id/tv_pixelcount" />
+</RelativeLayout>
