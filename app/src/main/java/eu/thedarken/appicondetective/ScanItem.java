@@ -41,4 +41,19 @@ public class ScanItem {
     public void setName(String name) {
         mName = name;
     }
+
+    @Override
+    public String toString() {
+        return getPxCount() + ";" + getPackageName() + ";" + getWidth() + ";" + getHeight() + ";" + getName();
+    }
+
+    public String toUserReadableString(int normalSize) {
+        StringBuilder builder = new StringBuilder();
+        builder.append("AppName:" + getName() + "\n");
+        builder.append("PackageName:" + getPackageName() + "\n");
+        builder.append("Width x Height:" + getWidth() + "x" + getHeight() + "\n");
+        int percent = (int) ((getPxCount() * 100.0f) / normalSize);
+        builder.append("Above default:" + percent + "%");
+        return builder.toString();
+    }
 }

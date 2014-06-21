@@ -23,6 +23,8 @@ public class ScanFragment extends Fragment implements LoaderManager.LoaderCallba
     private ScanListAdapter mAdapter;
     private TextView mInfo;
     private ProgressBar mProgressBar;
+    private int mW;
+    private int mH;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -50,11 +52,11 @@ public class ScanFragment extends Fragment implements LoaderManager.LoaderCallba
         super.onActivityCreated(savedInstanceState);
         Drawable defaultIcon = getActivity().getApplicationInfo().loadIcon(getActivity().getPackageManager());
         Bitmap bitmap = ((BitmapDrawable) defaultIcon).getBitmap();
-        int w = bitmap.getWidth();
-        int h = bitmap.getHeight();
+        mW = bitmap.getWidth();
+        mH = bitmap.getHeight();
         DisplayMetrics metrics = getResources().getDisplayMetrics();
-        mInfo.setText("Optimal size: " + w + "W " + h + "H (" + (h * w) + ")" + "\n display density: " + metrics.density);
-        mAdapter = new ScanListAdapter(w, h);
+        mInfo.setText("Optimal size: " + mW + "W " + mH + "H (" + (mH * mW) + ")" + "\n display density: " + metrics.density);
+        mAdapter = new ScanListAdapter(mW, mH);
         mListView.setAdapter(mAdapter);
         getLoaderManager().initLoader(LOADER_ID, null, this);
     }
@@ -95,4 +97,5 @@ public class ScanFragment extends Fragment implements LoaderManager.LoaderCallba
         mAdapter.setData(null);
         mAdapter.notifyDataSetChanged();
     }
+
 }
