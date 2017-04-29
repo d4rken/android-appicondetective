@@ -2,9 +2,10 @@ package eu.thedarken.appicondetective;
 
 public class ScanItem {
     private final String mPackageName;
-    private int mHeight;
-    private int mWidth;
+    private int mHeight = -1;
+    private int mWidth = -1;
     private String mName;
+    private String mType;
 
     public ScanItem(String packageName) {
         mPackageName = packageName;
@@ -42,6 +43,14 @@ public class ScanItem {
         mName = name;
     }
 
+    public String getType() {
+        return mType;
+    }
+
+    public void setType(String mType) {
+        this.mType = mType;
+    }
+
     @Override
     public String toString() {
         return getPxCount() + ";" + getPackageName() + ";" + getWidth() + ";" + getHeight() + ";" + getName();
@@ -56,4 +65,6 @@ public class ScanItem {
         builder.append("Above default:" + percent + "%");
         return builder.toString();
     }
+
+
 }

@@ -8,6 +8,8 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.DrawableContainer;
 import android.graphics.drawable.StateListDrawable;
+import android.graphics.drawable.VectorDrawable;
+import android.support.graphics.drawable.VectorDrawableCompat;
 import android.support.v4.content.AsyncTaskLoader;
 
 import java.util.ArrayList;
@@ -31,28 +33,15 @@ public class ScanLoader extends AsyncTaskLoader<List<ScanItem>> {
 
     @Override
     public void deliverResult(List<ScanItem> data) {
-        if (isReset()) {
-            releaseResources();
-            return;
-        }
-
-        List<ScanItem> oldData = this.mData;
+        if (isReset()) return;
         this.mData = data;
-
-        if (isStarted())
-            super.deliverResult(data);
-
-        if (oldData != null && oldData != data)
-            releaseResources();
+        if (isStarted()) super.deliverResult(data);
     }
 
     @Override
     protected void onStartLoading() {
-        if (mData != null)
-            deliverResult(mData);
-
-        if (takeContentChanged() || mData == null)
-            forceLoad();
+        if (mData != null) deliverResult(mData);
+        if (takeContentChanged() || mData == null) forceLoad();
     }
 
     @Override
@@ -63,30 +52,16 @@ public class ScanLoader extends AsyncTaskLoader<List<ScanItem>> {
     @Override
     protected void onReset() {
         onStopLoading();
-        if (mData != null) {
-            releaseResources();
-            mData = null;
-        }
-    }
-
-    @Override
-    public void onCanceled(List<ScanItem> data) {
-        super.onCanceled(data);
-        releaseResources();
-    }
-
-    protected void releaseResources() {
-
+        mData = null;
     }
 
     @Override
     public List<ScanItem> loadInBackground() {
         PackageManager pm = getContext().getPackageManager();
-        List<ScanItem> result = new ArrayList<ScanItem>();
+        List<ScanItem> result = new ArrayList<>();
         List<PackageInfo> packages = pm.getInstalledPackages(0);
         for (PackageInfo pkg : packages) {
             ScanItem newItem = new ScanItem(pkg.packageName);
-
             if (pkg.applicationInfo != null) {
                 Drawable icon = pkg.applicationInfo.loadIcon(pm);
                 if (icon instanceof BitmapDrawable) {
@@ -94,13 +69,10 @@ public class ScanLoader extends AsyncTaskLoader<List<ScanItem>> {
                     newItem.setHeight(bitmap.getHeight());
                     newItem.setWidth(bitmap.getWidth());
                 } else if (icon instanceof StateListDrawable) {
-                    StateListDrawable stateDrwbl = (StateListDrawable) icon;
-                    stateDrwbl.mutate();
-                    Drawable.ConstantState constantState = stateDrwbl.getConstantState();
+                    Drawable.ConstantState constantState = icon.mutate().getConstantState();
                     if (constantState instanceof DrawableContainer.DrawableContainerState) {
                         DrawableContainer.DrawableContainerState drwblContainerState = (DrawableContainer.DrawableContainerState) constantState;
-                        final Drawable[] drawables = drwblContainerState.getChildren();
-                        for (Drawable drwbl : drawables) {
+                        for (Drawable drwbl : drwblContainerState.getChildren()) {
                             if (drwbl instanceof BitmapDrawable) {
                                 Bitmap bitmap = ((BitmapDrawable) drwbl).getBitmap();
                                 newItem.setHeight(bitmap.getHeight());
@@ -109,13 +81,16 @@ public class ScanLoader extends AsyncTaskLoader<List<ScanItem>> {
                             }
                         }
                     }
+                } else if (icon instanceof VectorDrawable || icon instanceof VectorDrawableCompat) {
+                    newItem.setHeight(icon.getIntrinsicHeight());
+                    newItem.setWidth(icon.getIntrinsicWidth());
                 }
 
+                newItem.setType(icon.getClass().getSimpleName());
             }
             if (pkg.applicationInfo != null) {
                 CharSequence name = pm.getApplicationLabel(pkg.applicationInfo);
-                if (name != null)
-                    newItem.setName(name.toString());
+                if (name != null) newItem.setName(name.toString());
             }
             result.add(newItem);
         }

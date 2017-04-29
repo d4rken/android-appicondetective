@@ -8,9 +8,10 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class ScanListAdapter extends BaseAdapter {
-    private final List<ScanItem> mData = new ArrayList<ScanItem>();
+    private final List<ScanItem> mData = new ArrayList<>();
     private int mOptimalWidth;
     private int mOptimalHeight;
     private int mOptimalCount;
@@ -64,9 +65,16 @@ public class ScanListAdapter extends BaseAdapter {
             holder = (ViewHolder) convertView.getTag();
         }
         ScanItem item = getItem(position);
-        int percent = (int) ((item.getPxCount() * 100.0f) / mOptimalCount);
-        holder.pxCount.setText("PX: " + item.getPxCount() + " (" + percent + "%)");
-        holder.dimen.setText(item.getWidth() + "W " + item.getHeight() + "H");
+        if (item.getWidth() > 0 && item.getHeight() > 0) {
+            int percent = (int) ((item.getPxCount() * 100.0f) / mOptimalCount);
+            holder.pxCount.setText("PX: " + item.getPxCount() + " (" + percent + "%)");
+        } else {
+            holder.pxCount.setText("Unsupported");
+        }
+
+        holder.dimen.setText(item.getType());
+        holder.dimen.append(String.format(Locale.getDefault(), " %dW %dH", item.getWidth(), item.getHeight()));
+
         holder.name.setText(item.getName());
         holder.pkg.setText(item.getPackageName());
         if (item.getPxCount() > mOptimalCount * 4) {
