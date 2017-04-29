@@ -1,9 +1,25 @@
 apply plugin: 'com.android.application'
-
+def gitSha = 'git rev-parse --short HEAD'.execute([], project.rootDir).text.trim()
 android {
     compileSdkVersion 25
     buildToolsVersion "25.0.2"
-
+    signingConfigs {
+        release {
+        }
+    }
+    def signingPropFile = new File(System.properties['user.home'], ".signing/darken/signing.properties")
+    if (signingPropFile.canRead()) {
+        def Properties signingProps = new Properties()
+        signingProps.load(new FileInputStream(signingPropFile))
+        signingConfigs {
+            release {
+                storeFile new File(signingProps['release.storePath'])
+                keyAlias signingProps['release.keyAlias']
+                storePassword signingProps['release.storePassword']
+                keyPassword signingProps['release.keyPassword']
+            }
+        }
+    }
     defaultConfig {
         minSdkVersion 9
         targetSdkVersion 25
@@ -12,7 +28,19 @@ android {
     }
     buildTypes {
         release {
-
+            signingConfig signingConfigs.release
+        }
+    }
+    applicationVariants.all { variant ->
+        if (variant.buildType.name == "debug") {
+            variant.mergedFlavor.resourceConfigurations.clear()
+            variant.mergedFlavor.resourceConfigurations.add("en")
+        } else if (variant.buildType.name != "debug") {
+            variant.outputs.each { output ->
+                def file = output.outputFile
+                //noinspection GroovyAssignabilityCheck
+                output.outputFile = new File(file.parent, "AppIconDetective-v" + defaultConfig.versionName + "(" + defaultConfig.versionCode + ")-" + variant.buildType.name.toUpperCase() + "-" + gitSha + ".apk")
+            }
         }
     }
 }
